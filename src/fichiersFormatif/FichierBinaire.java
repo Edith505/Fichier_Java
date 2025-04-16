@@ -19,11 +19,11 @@ public class FichierBinaire {
 
 //        comparerBufferOutput();
 
-//        ecrireBinaireBoucle(new Personne(Titre.MADAME, 67, "Pierrette"),
-//                new Personne(Titre.MONSEIGNEUR, 74, "George"),
-//                new Personne(Titre.MONSEIGNEUR, 94, "Ambrius"));
-//        System.out.println(lireBinaireBoucle());
-//
+        ecrireBinaireBoucle(new Personne(Titre.MADAME, 67, "Pierrette"),
+                new Personne(Titre.MONSEIGNEUR, 74, "George"),
+                new Personne(Titre.MONSEIGNEUR, 94, "Ambrius"));
+        System.out.println(lireBinaireBoucle());
+
 //        ajouterAuFichier("Bonjour");
 //        ajouterAuFichier(" Monde!");
 
@@ -106,7 +106,32 @@ public class FichierBinaire {
     private static void ecrireBinaireBoucle(Personne... personnes) {
         //todo 6-1 Écrire une boucle qui enregistre toutes les perosnnes reçues en paramètre dans un fichier.
         // Notez qu'un enum peut être converti en texte facilement avec la méthode toString.
+        FileOutputStream fos = null;
+        BufferedOutputStream bos = null;
+        DataOutputStream dos = null;
 
+        try {
+            fos = new FileOutputStream("bidon.bin");
+            bos = new BufferedOutputStream(fos);
+            dos = new DataOutputStream(bos);
+
+            for (Personne p : personnes) {
+                dos.writeUTF(p.getNom());
+                dos.writeInt(p.getAge());
+                dos.writeUTF(p.getTitre().toString());
+            }
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                dos.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
     }
 
@@ -115,9 +140,37 @@ public class FichierBinaire {
         // todo 6-2 Lisez le fichier binaire écrit en 6-1
         //  Si une information se répète un nombre indéterminé de fois, comment savoir quand arrêter de lire les données ?
         // Attrapez l'exception de fin de fichier pour déterminer la fin de l'exécution.
+        ObjectInputStream ois = null;
+
+        try {
+            ois = new ObjectInputStream(
+                    new BufferedInputStream(
+                            new FileInputStream("bidon.bin")));
+
+            while (true) {
+                String nom = ois.readUTF();
+                int age = ois.readInt();
+                Titre titre = Titre.valueOf(ois.readUTF());
+
+                retListe.add(new Personne(titre, age, nom));
+            }
 
 
-        return null;
+        } catch (EOFException e) {
+            System.out.println("----");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (ois != null) {
+                    ois.close();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return retListe;
     }
 
     public static void ajouterAuFichier(String texteAjoute) {
