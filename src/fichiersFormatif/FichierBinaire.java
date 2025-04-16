@@ -15,7 +15,7 @@ public class FichierBinaire {
 
         ecrireInfoDiverseBinaire();
 //        ecrireInfoDiverseBinaire2();
-//        lireAfficherInfoDiverseBinaire();
+        lireAfficherInfoDiverseBinaire();
 
 //        comparerBufferOutput();
 
@@ -26,7 +26,6 @@ public class FichierBinaire {
 //
 //        ajouterAuFichier("Bonjour");
 //        ajouterAuFichier(" Monde!");
-
 
     }
 
@@ -40,11 +39,61 @@ public class FichierBinaire {
         BufferedOutputStream bos = null;
         DataOutputStream dos = null;
 
+        try {
+            fos = new FileOutputStream("bidon.bin");
+            bos = new BufferedOutputStream(fos);
+            dos = new DataOutputStream(bos);
+
+            dos.writeUTF("Eddy Manoa");
+            dos.writeInt(13);
+            dos.writeDouble(new Random().nextDouble());
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                dos.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 
 
     private static void lireAfficherInfoDiverseBinaire() {
         // todo 5-2 on doit lire les informations écrites avec ecrireInfoDiverseBinaire et les afficher en console
+        FileInputStream fis = null;
+        DataInputStream dis = null;
+        String text = "";
+        int nombreEntier = 0;
+        double nombreDouble = 0;
+
+        try {
+            fis = new FileInputStream("bidon.bin");
+            dis = new DataInputStream(fis);
+
+            text = dis.readUTF();
+            nombreEntier = dis.readInt();
+            nombreDouble = dis.readDouble();
+
+            System.out.println("le text : " + text);
+            System.out.println("Le nombre entier : " + nombreEntier);
+            System.out.println("Le nombre double : " + nombreDouble);
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                dis.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
     }
 
@@ -57,6 +106,7 @@ public class FichierBinaire {
     private static void ecrireBinaireBoucle(Personne... personnes) {
         //todo 6-1 Écrire une boucle qui enregistre toutes les perosnnes reçues en paramètre dans un fichier.
         // Notez qu'un enum peut être converti en texte facilement avec la méthode toString.
+
 
     }
 
