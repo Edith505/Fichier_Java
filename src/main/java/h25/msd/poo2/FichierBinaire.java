@@ -35,6 +35,38 @@ public class FichierBinaire {
         //  utf ->votre nom;
         //  double ->un nombre aléatoire
 
+       FileOutputStream fos = null;
+       DataOutputStream dos = null;
+       BufferedOutputStream bos = null;
+
+        try {
+            fos = new FileOutputStream(BASE_PATH + "bidon.bin");
+            bos = new BufferedOutputStream(fos);
+            dos = new DataOutputStream(bos);
+
+            int nombreFavori = 20;
+            String nom = "Jean";
+            double nombreAleatoire = new Random().nextDouble();
+
+            dos.writeUTF(nom);
+            dos.writeInt(nombreFavori);
+            dos.writeDouble(nombreAleatoire);
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                if(dos != null){
+                    dos.close();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
     }
 
 
@@ -42,10 +74,35 @@ public class FichierBinaire {
         // todo 5-1 on doit écrire les informations suivantes dans le fichier bidon.txt:
         //  int ->votre nombre favori; utf ->votre nom; double ->un nombre aléatoire
 
+
     }
 
     private static void lireAfficherInfoDiverseBinaire() {
         // todo 5-2 on doit lire les informations écrites avec ecrireInfoDiverseBinaire et les afficher en console
+        FileInputStream fis = null;
+        DataInputStream dis = null;
+        BufferedInputStream bis = null;
+
+        try {
+            fis = new FileInputStream(BASE_PATH + "bidon.bin");
+            bis = new BufferedInputStream(fis);
+            dis = new DataInputStream(bis);
+
+            System.out.println("nombre favori: " + dis.readInt());
+            System.out.println("Nom: " + dis.readUTF());
+            System.out.println("nombre aleatoire: " + dis.readDouble());
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                dis.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
     }
 
