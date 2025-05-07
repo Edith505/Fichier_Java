@@ -1,0 +1,12 @@
+{
+  "nombreVitesse": 100,
+  "numSerie": "712c3900-62e7-4368-9059-cc7c960b6fe5",
+  "cycliste": {
+    "nom": "Bidule"
+  },
+  "sacTransport": {
+    "a": "objet A",
+    "b": "objet B",
+    "c": "objet C"
+  }
+}
